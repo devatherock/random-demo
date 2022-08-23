@@ -1,0 +1,22 @@
+plugins {
+    id 'groovy'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.jenkins-ci.org/releases/' }
+}
+
+dependencies {
+    testImplementation 'org.codehaus.groovy:groovy:3.0.12'
+    testImplementation 'org.codehaus.groovy:groovy-test:3.0.12'
+    testImplementation "com.lesfurets:jenkins-pipeline-unit:1.9"
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.7.0' 
+}
+
+test {
+    testLogging {
+        showStandardStreams = Boolean.getBoolean('all.logs')
+        events 'passed', 'failed'
+    }
+}
