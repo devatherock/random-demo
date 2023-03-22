@@ -1,0 +1,15 @@
+version: "3.3"
+services:
+  web:
+    build: .
+    image: flaskapp:latest
+    ports:
+      - 3000:3000
+    command: echo "Service 'web' exiting.."
+  flask:
+    image: flaskapp:latest
+    ports:
+      - 5000:5000
+    command: flask run --host=0.0.0.0
+    depends_on:
+      - web

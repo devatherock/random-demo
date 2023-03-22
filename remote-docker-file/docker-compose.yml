@@ -1,0 +1,5 @@
+version: '3.5'
+services:
+
+  app:
+    build: "https://${GIT_TOKEN}@github.com/devatherock/minify-js.git#develop"

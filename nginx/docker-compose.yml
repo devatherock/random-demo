@@ -1,0 +1,31 @@
+version: '3.5'
+services:
+
+  webserver:
+    image: nginx:alpine
+    restart: always
+    tty: true
+    ports:
+      - 8081:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - app
+    container_name: test-webserver
+    networks:
+      - app-network
+
+  app:
+    image: devatherock/artifactory-badge:latest
+    environment:
+      - ARTIFACTORY_URL=http://localhost:8081
+      - ARTIFACTORY_API_KEY=dummy
+    restart: on-failure
+    tty: true
+    container_name: test-app
+    networks:
+      - app-network
+      
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,21 @@
+version: "3.3"
+services:
+  web:
+    build: .
+    image: flaskapp:latest
+    ports:
+      - 3000:3000
+    command: echo "Service 'web' exiting.."
+  flask:
+    image: python:3.7-buster
+    ports:
+      - 5000:5000
+    volumes:
+      - ./app.py:/home/deployment/app.py
+    working_dir: /home/deployment
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        pip install flask
+        flask run --host=0.0.0.0
