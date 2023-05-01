@@ -1,0 +1,131 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: default
+  labels:
+    app: grafana
+  name: grafana-secrets
+type: Opaque
+stringData:
+  admin_password: testpwd
+  
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: default
+  labels:
+    app: grafana
+  name: grafana-dashboard-provider
+data:
+  dashboard.yml: |-
+    ---
+    apiVersion: 1
+
+    providers:
+      - name: "Dashboard provider"
+        orgId: 1
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 10
+        allowUiUpdates: false
+        options:
+          path: /var/lib/grafana/dashboards
+          foldersFromFilesStructure: true
+          
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: default
+  labels:
+    app: grafana
+  name: grafana-config
+data:
+  admin_user: testuser
+  default_home_dashboard_path: /var/lib/grafana/dashboards/test-dashboard.json        
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  labels:
+    app: grafana
+  name: grafana
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: grafana-secrets
+            items:
+              - key: admin_password
+                path: admin_password
+        - name: dashboard-provider-volume
+          configMap:
+            name: grafana-dashboard-provider
+            items:
+              - key: dashboard.yml
+                path: main.yaml
+        - name: dashboards-volume
+          configMap:
+            name: grafana-dashboards
+            items:
+              - key: test-dashboard.json
+                path: test-dashboard.json
+        - name: config-volume
+          configMap:
+            name: grafana-config
+            items:
+              - key: admin_user
+                path: admin_user
+              - key: default_home_dashboard_path
+                path: default_home_dashboard_path          
+      containers:
+        - name: grafana
+          image: grafana/grafana-oss:9.5.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: secret-volume
+              mountPath: /etc/secrets
+            - name: dashboard-provider-volume
+              mountPath: /etc/grafana/provisioning/dashboards
+            - name: dashboards-volume
+              mountPath: /var/lib/grafana/dashboards
+            - name: config-volume
+              mountPath: /etc/config
+          env:
+            - name: GF_SECURITY_ADMIN_PASSWORD__FILE
+              value: /etc/secrets/admin_password
+            - name: GF_SECURITY_ADMIN_USER__FILE
+              value: /etc/config/admin_user
+            - name: GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH__FILE
+              value: /etc/config/default_home_dashboard_path  
+              
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: default
+  labels:
+    app: grafana
+  name: grafana
+spec:
+  type: NodePort
+  selector:
+    app: grafana
+  ports:
+    - port: 3000
+      name: http
+      targetPort: 3000
