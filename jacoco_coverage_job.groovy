@@ -2,7 +2,7 @@ pipelineJob('jacoco-coverage') {
 
   definition {
     cps {
-      script(readFileFromWorkspace('pipelines/jacoco-coverage.groovy'))
+      script(readFileFromWorkspace('pipelines/jacoco_coverage.groovy'))
     }
   }  
 }

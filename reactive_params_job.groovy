@@ -40,7 +40,7 @@ pipelineJob('reactive-params') {
   
   definition {
     cps {
-      script(readFileFromWorkspace('pipelines/reactive-params.groovy')
+      script(readFileFromWorkspace('pipelines/reactive_params.groovy')
     }
   }  
 }
