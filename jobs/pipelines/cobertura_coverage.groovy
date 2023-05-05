@@ -12,9 +12,14 @@ pipeline {
     }
 
     post {
-    	success {
+    	always {
 		    cobertura coberturaReportFile: '**/reports/cobertura/coverage.xml'
-            recordCoverage(tools: [[parser: 'COBERTURA']], id: 'cobertura', name: 'Cobertura Coverage', sourceDirectories: [[path: '**/src']])
+            recordCoverage(
+            	tools: [[parser: 'COBERTURA']], 
+            	id: 'cobertura', 
+            	name: 'Cobertura Coverage', 
+            	sourceDirectories: [[path: '**/src']]
+        	)
     	}
     }
 }
