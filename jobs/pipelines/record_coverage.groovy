@@ -16,7 +16,8 @@ pipeline {
             recordCoverage(
             	tools: [
             		[
-            			parser: 'JACOCO'
+            			parser: 'JACOCO',
+            			pattern: '**/jacocoTestReport.xml'
         			]
         		], 
             	id: 'jacoco', 
