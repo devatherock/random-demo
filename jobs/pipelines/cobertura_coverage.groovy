@@ -15,7 +15,12 @@ pipeline {
     	always {
 		    cobertura coberturaReportFile: '**/reports/cobertura/coverage.xml'
             recordCoverage(
-            	tools: [[parser: 'COBERTURA']], 
+            	tools: [
+            		[
+            			parser: 'COBERTURA',
+            			pattern: '**/coverage.xml'
+        			]
+        		], 
             	id: 'cobertura', 
             	name: 'Cobertura Coverage', 
             	sourceDirectories: [[path: '**/src']]
