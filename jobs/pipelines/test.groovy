@@ -1,6 +1,7 @@
 import groovy.xml.XmlUtil
 import groovy.util.XmlSlurper
 
+@NonCPS
 void updateFile() {
     String xmlText = '''
     <configuration>
