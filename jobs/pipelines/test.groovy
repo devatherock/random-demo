@@ -1,5 +1,5 @@
 import groovy.xml.XmlUtil
-import groovy.xml.XmlSlurper
+import groovy.util.XmlSlurper
 
 void updateFile() {
     String xmlText = '''
