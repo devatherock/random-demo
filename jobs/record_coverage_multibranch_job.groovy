@@ -13,6 +13,8 @@ multibranchPipelineJob('record-coverage-multibranch') {
             gitHubBranchDiscovery {
               strategyId(3)
             }
+
+            wipeWorkspaceTrait()
           }
         }
       }
