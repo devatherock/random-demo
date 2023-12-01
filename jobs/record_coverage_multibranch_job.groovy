@@ -18,6 +18,8 @@ multibranchPipelineJob('record-coverage-multibranch') {
               extension {
                 shallow(false)
                 noTags(false)
+                reference('')
+                timeout(15)
                 depth(0)
               }
             }
