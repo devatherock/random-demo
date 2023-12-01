@@ -14,6 +14,14 @@ multibranchPipelineJob('record-coverage-multibranch') {
               strategyId(3)
             }
 
+            cloneOptionTrait {
+              extension {
+                shallow(false)
+                noTags(false)
+                depth(0)
+              }
+            }
+
             wipeWorkspaceTrait()
           }
         }
