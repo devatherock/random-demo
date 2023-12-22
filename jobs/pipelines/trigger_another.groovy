@@ -9,10 +9,12 @@ pipeline {
                    echo "hello from parent job" >> test.txt
                 '''
 
-                File testFile = new File('test.txt')
-                build job: 'stashed-file', parameters: [
-                    stashedFile(name: 'INPUT_FILE', base64: Base64.encoder.encodeToString(testFile.bytes)),
-                ]
+                script {
+                    File testFile = new File('test.txt')
+                    build job: 'stashed-file', parameters: [
+                        stashedFile(name: 'INPUT_FILE', base64: Base64.encoder.encodeToString(testFile.bytes)),
+                    ]
+                }
             }
         }
     }
