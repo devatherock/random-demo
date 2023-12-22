@@ -11,12 +11,12 @@ pipeline {
 
                 script {
                     File testFile = new File("${env.WORKSPACE}/test.txt")
-                    // def factory = new org.apache.commons.fileupload.disk.DiskFileItemFactory()
-                    // def fileItem = factory.createItem('file', 'text/plain', false, 'test-copy.txt')
-                    // fileItem.outputStream << testFile.bytes
+                    def factory = new org.apache.commons.fileupload.disk.DiskFileItemFactory()
+                    def fileItem = factory.createItem('file', 'text/plain', false, 'test-copy.txt')
+                    fileItem.outputStream << testFile.bytes
 
                     build job: 'stashed-file', parameters: [
-                        new FileParameterValue('INPUT_FILE', testFile, 'test.txt'),
+                        new StashedFileParameterValue​('INPUT_FILE', fileItem),
                     ]
                 }
             }
