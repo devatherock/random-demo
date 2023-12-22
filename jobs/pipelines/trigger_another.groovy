@@ -12,7 +12,7 @@ pipeline {
                 script {
                     File testFile = new File("${env.WORKSPACE}/test.txt")
                     build job: 'stashed-file', parameters: [
-                        base64File(name: 'INPUT_FILE', base64: Base64.encoder.encodeToString('hello'.bytes)),
+                        stashedFile(name: 'INPUT_FILE', file: testFile),
                     ]
                 }
             }
