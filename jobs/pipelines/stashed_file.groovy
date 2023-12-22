@@ -8,6 +8,7 @@ pipeline {
     stages {
         stage('Find file name') {
             steps {
+               deleteDir() // To cleanup workspace 
                sh 'mkdir test'
 
                dir('test') {
