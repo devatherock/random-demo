@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    parameters {
+        stashedFile(name: 'inputFile', description: 'some file')
+    }
+
     stages {
         stage('Find file name') {
             steps {
@@ -9,7 +13,7 @@ pipeline {
                dir('temp') {
                    unstash 'inputFile'
                }
-               
+
                script {
                    String fileName = sh(script: '''#!/bin/bash
                        cd temp
