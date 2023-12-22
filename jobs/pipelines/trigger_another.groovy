@@ -13,7 +13,7 @@ pipeline {
                     File testFile = new File("${env.WORKSPACE}/test.txt")
                     def factory = new org.apache.commons.fileupload.disk.DiskFileItemFactory()
                     def fileItem = factory.createItem('file', 'text/plain', false, 'test-copy.txt')
-                    fileItem.write(testFile)
+                    fileItem.outputStream << testFile.bytes
 
                     build job: 'stashed-file', parameters: [
                         stashedFile(name: 'INPUT_FILE', file: fileItem),
