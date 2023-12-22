@@ -1,7 +1,7 @@
 pipelineJob('stashed-file') {
 
   parameters {
-    stashedFile(name: 'inputFile', description: 'some file')
+    stashedFile 'inputFile'
   }
 
   definition {
