@@ -16,7 +16,7 @@ pipeline {
                     fileItem.outputStream << testFile.bytes
 
                     build job: 'stashed-file', parameters: [
-                        new StashedFileParameterValue​('INPUT_FILE', fileItem),
+                        new io.jenkins.plugins.file_parameters.StashedFileParameterValue('INPUT_FILE', fileItem),
                     ]
                 }
             }
