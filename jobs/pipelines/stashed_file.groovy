@@ -8,15 +8,15 @@ pipeline {
     stages {
         stage('Find file name') {
             steps {
-               sh 'mkdir temp'
+               sh 'mkdir test'
 
-               dir('temp') {
+               dir('test') {
                    unstash 'inputFile'
                }
 
                script {
                    String fileName = sh(script: '''#!/bin/bash
-                       cd temp
+                       cd test
                        ls
                    ''', returnStdout: true).trim()
                    println("The input filename: ${fileName}")
