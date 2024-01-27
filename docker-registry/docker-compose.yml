@@ -3,7 +3,11 @@ version: '3.7'
 services:
   htpasswd:
     image: httpd:2
-    command: 'htpasswd -Bb /auth/htpasswd testuser testpwd'
+    command: >
+      sh -c "
+        htpasswd -Bbc /auth/htpasswd testuser testpwd
+        chmod 644 /auth/htpasswd
+      "  
     volumes:
       - ./auth:/auth
 
