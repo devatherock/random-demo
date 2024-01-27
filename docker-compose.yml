@@ -21,4 +21,5 @@ services:
       - '8794:8794'
     volumes:
       - ./airflow:/data
+      - ./out:/out
     command: 'standalone'
