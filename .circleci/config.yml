@@ -1,0 +1,84 @@
+vm_executor_image: &vm_executor_image
+  machine:
+    image: ubuntu-2204:2023.04.2    
+
+work_directory: &work_directory
+  working_directory: ~/random-demo
+
+pr_filter: &pr_filter
+  filters:
+    branches:
+      ignore: master
+
+parameters:
+  repo_name:
+    type: string
+    default: "random-demo"
+  docker_image:
+    type: string
+    default: "example"  
+
+executors:
+  machine-executor:
+    <<: *vm_executor_image
+    resource_class: medium
+    <<: *work_directory
+  arm-executor:
+    <<: *vm_executor_image
+    resource_class: arm.medium
+    <<: *work_directory
+
+version: 2.1
+jobs:
+  publish:
+    executor: machine-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/<< pipeline.parameters.repo_name >>
+      - run: |
+          TAG=${CIRCLE_SHA1:0:8}
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+          docker build \
+            -t devatherock/<< pipeline.parameters.docker_image >>:$TAG \
+            -t devatherock/<< pipeline.parameters.docker_image >>:latest \
+            --platform=linux/arm64 example
+          docker image push --all-tags devatherock/<< pipeline.parameters.docker_image >>
+
+  test:
+    parameters:
+      runner:
+        type: executor
+    executor: << parameters.runner >>
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/<< pipeline.parameters.repo_name >>
+      - run: |
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+          docker run --rm \
+              --entrypoint='' \
+              -t devatherock/<< pipeline.parameters.docker_image >>:${CIRCLE_SHA1:0:8} sh -c "uname -m && upx -V"
+
+workflows:
+  version: 2.1
+  pr_check:
+    jobs:
+      - publish:
+          context:
+            - docker-credentials
+          <<: *pr_filter
+      - test:
+          name: test_arm
+          context:
+            - docker-credentials
+          runner: arm-executor
+          requires:
+            - publish
+      - test:
+          name: test_amd
+          context:
+            - docker-credentials
+          runner: machine-executor
+          requires:
+            - test_arm
