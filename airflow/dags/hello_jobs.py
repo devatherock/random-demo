@@ -1,0 +1,26 @@
+from airflow.decorators import dag, task
+from airflow.models import Variable
+
+@dag(dag_id = "hello-world-job",
+     doc_md = "Prints hello world", schedule = None)
+def say_hello():
+
+    @task
+    def python_print():
+        print('Hello World!, from print')
+
+    @task
+    def python_log(**kwargs):
+        log = kwargs["ti"].log
+        log.info("Hello World!, from log")
+
+    @task
+    def display_variables():
+        print("The environment: {}".format(Variable.get("env_name")))
+        props = Variable.get(key="props", deserialize_json=True)
+        print("Key one: {}".format(props.get("key_one")))
+        print("Key two: {}".format(props.get("key_two")))
+
+    python_print() >> python_log() >> display_variables()
+
+say_hello()    
