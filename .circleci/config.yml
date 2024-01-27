@@ -39,11 +39,13 @@ jobs:
       - run: |
           TAG=${CIRCLE_SHA1:0:8}
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-          docker build \
+          docker buildx create --name custombuilder \
+            --driver docker-container --use --bootstrap
+          docker buildx build \
+            --platform linux/arm64 \
+            --push \
             -t devatherock/<< pipeline.parameters.docker_image >>:$TAG \
-            -t devatherock/<< pipeline.parameters.docker_image >>:latest \
-            --platform=linux/arm64 example
-          docker image push --all-tags devatherock/<< pipeline.parameters.docker_image >>
+            -t devatherock/<< pipeline.parameters.docker_image >>:latest example
 
   test:
     parameters:
