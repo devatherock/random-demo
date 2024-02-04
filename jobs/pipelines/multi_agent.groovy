@@ -7,12 +7,14 @@ pipeline {
                 stage('init_1') {
                     steps {
                         script {
-                          env.DUMMY = "dummy-value"
+                            env.DUMMY = "dummy-value"
                         }
                     }
                 }
                 stage('init_2') {
-                   echo "Env variable value: ${env.DUMMY}"
+                    steps {
+                        echo "Env variable value: ${env.DUMMY}"
+                    }    
                 }
             }
         }
