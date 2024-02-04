@@ -25,7 +25,7 @@ pipeline {
             stages {
                 stage('actually do stuff') {
                     steps {
-                        sh('printenv')
+                        sh('echo "Env variable in docker agent: $DUMMY "')
                     }
                 }
             }    
