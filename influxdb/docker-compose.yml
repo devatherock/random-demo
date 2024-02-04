@@ -1,0 +1,5 @@
+services:
+  influxdb:
+    image: influxdb:1.8.10-alpine
+    ports:
+      - "8086:8086"
