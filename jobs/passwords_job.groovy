@@ -6,6 +6,7 @@ pipelineJob('passwords-job') {
   definition {
     cps {
       script(readFileFromWorkspace('jobs/pipelines/passwords.groovy'))
+      sandbox()
     }
   }  
 }
