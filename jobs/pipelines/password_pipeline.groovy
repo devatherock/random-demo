@@ -9,10 +9,9 @@ pipeline {
     }
 
     stages {
-        stage('read password parameters') {
+        stage('read password parameter') {
             steps {
                 sh '''
-                   echo "Secret one: $SECRET_ONE"
                    echo "Secret two: $SECRET_TWO"
                 '''
             }
