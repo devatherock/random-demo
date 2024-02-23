@@ -4,6 +4,4 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SWAGGER_JSON: /specs/swagger.json
-    volumes:
-      - ./swagger.json:/specs/swagger.json
+      CONFIG_URL: https://raw.githubusercontent.com/devatherock/api-specs/master/render/swagger-config.yml
