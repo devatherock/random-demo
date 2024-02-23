@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: demo-config
+data:
+  application.yml: |
+    myapp:
+      namespace:
+        namespace1.connection: xxxx
+        namespace1.url: yyy
+        namespace2.topic: zzz
+        namespace2.id: ccc
