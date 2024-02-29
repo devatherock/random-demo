@@ -1,10 +1,9 @@
-version: '3.3'
 services:
   localstack:
+    image: localstack/localstack:3.2.0
     container_name: localstack
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports:
       - '4566-4583:4566-4583'
-    command: docker exec -it localstack sh -c "/usr/local/bin/create_bucket.sh" # Won't run as docker won't exist inside the container
+      - '4510-4559:4510-4559'
+    volumes:
+      - ./scripts:/scripts
